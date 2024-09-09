@@ -30,11 +30,58 @@ body {
   flex-direction: column;
   padding: 2em;
   overflow-x: hidden;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 hr {
-  color: transparent;
+  color: #999999;
+}
+
+h1,
+h2 {
+  border-bottom: solid 1px #5f2721;
+}
+
+a {
+  color: #973f35;
+  text-decoration: none;
+  transition: 0.2s ease-in-out;
+}
+
+a:hover {
+  color: #bd4f42;
+  text-decoration: underline;
+}
+
+img {
+  opacity: 0.7;
+  max-width: calc(100% - 2rem);
+  margin-left: 1rem;
+  margin-right: 1rem;
+  padding: 0;
+}
+
+blockquote {
+  border-left: solid #5f2721 5px;
+  padding-left: 5px;
+  margin-left: 2rem;
+  box-shadow: 0 0 5px #110d0d;
+}
+
+pre {
+  background-color: #292424;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  border-left: #5f2721 5px solid;
+  border-radius: 10px;
+}
+
+code {
+  background-color: #292424;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
 }
 
 .name {
@@ -43,7 +90,7 @@ hr {
 }
 
 .about {
-    text-align: justify;
+  text-align: justify;
 }
 
 .dots svg {
