@@ -12,6 +12,7 @@
     />
     <title>anupam's posts</title>
     <link rel="stylesheet" href="../style.css" />
+    <script src="../js/script.js"></script>
   </head>
   <body class="space-mono-regular">
     <div class="screen">
@@ -21,27 +22,50 @@
       <hr />
       <div class="post-list">
         <ul id="post-list"></ul>
+        <div id="loading">loading posts...</div>
+        <div id="error" style="display: none; color: #ff5555">
+          failed to load posts. check console.
+        </div>
       </div>
     </div>
 
     <!-- script -->
     <script>
-      fetch("posts.json")
-        .then((res) => res.json())
-        .then((posts) => {
-          const list = document.getElementById("post-list");
+      document.addEventListener("DOMContentLoaded", () => {
+        fetch("posts.json")
+          .then((res) => {
+            if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+            return res.json();
+          })
+          .then((posts) => {
+            document.getElementById("loading").style.display = "none";
+            const list = document.getElementById("post-list");
 
-          posts.sort((x, y) => new Date(y.date) - new Date(x.date));
+            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-          posts.forEach((post) => {
-            const item = document.createElement("li");
-            item.innerHTML = `${new Date(post.date).toLocaleDateString("en-CA")} ~ <a href="viewer.html?post=${post.file}">${post.title}</a>`;
-            list.append(item);
+            posts.forEach((post) => {
+              const item = document.createElement("li");
+              const postDate = new Date(post.date).toLocaleDateString("en-CA", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              });
+
+              item.innerHTML = `
+                <span class="post-date">${postDate}</span> ~
+                <a href="viewer.html?post=${encodeURIComponent(post.file)}" class="post-link">
+                  ${post.title}
+                </a>
+              `;
+              list.appendChild(item);
+            });
+          })
+          .catch((error) => {
+            console.error("Error loading posts:", error);
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("error").style.display = "block";
           });
-        })
-        .catch((error) => {
-          console.error("error loading posts: ", error);
-        });
+      });
     </script>
   </body>
 </html>

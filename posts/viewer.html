@@ -12,6 +12,7 @@
     />
     <title>anupam's post</title>
     <link rel="stylesheet" href="../style.css" />
+    <script src="../js/script.js"></script>
   </head>
   <body class="space-mono-regular">
     <div class="screen">
@@ -22,7 +23,7 @@
       <div id="post-content"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="../js/markdown.js"></script>
 
     <!-- script -->
     <script>
@@ -31,7 +32,7 @@
         const mdFile = urlParams.get("post");
 
         if (mdFile) {
-          fetch(mdFile)
+          fetch(`markdown/${mdFile}.md`)
             .then((res) => {
               if (!res.ok) {
                 throw new Error(`error fetching: ${res.status}`);
@@ -39,14 +40,23 @@
               return res.text();
             })
             .then((markdown) => {
-              const html = marked.parse(markdown);
+              const html = markdownRender(markdown);
               document.getElementById("post-content").innerHTML = html;
+
+              if (typeof hljs !== "undefined") {
+                document.querySelectorAll("pre code").forEach((block) => {
+                  hljs.highlightElement(block);
+                });
+              }
             })
             .catch((error) => {
               console.error("error loading post: ", error);
               document.getElementById("post-content").innerHTML =
                 "<p>something went wrong</p>";
             });
+        } else {
+          document.getElementById("post-content").innerHTML =
+            "<p>No post specified. Please select a post from the <a href='posts.html'>posts page</a></p>";
         }
       });
     </script>
