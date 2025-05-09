@@ -142,10 +142,15 @@ img {
 }
 
 .dots svg {
-  filter: invert(100%);
   height: 2em;
   padding: 10px;
   transition: transform 0.2s ease-in-out;
+}
+html:not([data-theme="light"]) .dots svg {
+  filter: invert(100%);
+}
+html[data-theme="light"] .dots svg {
+  filter: none;
 }
 
 .dots svg:hover {
