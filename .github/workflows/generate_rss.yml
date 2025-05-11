@@ -1,0 +1,32 @@
+name: Generate RSS Feed
+
+on:
+  push:
+    paths:
+      - "posts/markdown/**"
+      - "posts/posts.json"
+
+jobs:
+  generate-rss:
+    runs_on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Generate RSS Feed
+        run: |
+          npm install
+          node js/generate-rss.js
+
+      - name: Commit and Push if changed
+        run: |
+          git config --global user.name "Github Actions"
+          git config --global user.email "actions@github.com"
+          git add posts/rss_feed.xml
+          git diff --quiet && git diff --staged --quiet || git commit -m "Update RSS feed"
+          git push

@@ -1,0 +1,7 @@
+{
+  "name": "rjanupam.github.io",
+  "version": "1.0.1",
+  "scripts": {
+    "generate-rss": "node js/generate-rss.js"
+  }
+}
