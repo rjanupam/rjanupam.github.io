@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/jpg" href="../images/profile_pic.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <title>anupam's post</title>
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body class="space-mono-regular">
+    <div class="screen">
+      <div class="name space-mono-bold">anupam</div>
+      <hr />
+      <a href="posts.html">back to posts</a>
+      <hr />
+      <div id="post-content"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <!-- script -->
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        const mdFile = urlParams.get("post");
+
+        if (mdFile) {
+          fetch(mdFile)
+            .then((res) => {
+              if (!res.ok) {
+                throw new Error(`error fetching: ${res.status}`);
+              }
+              return res.text();
+            })
+            .then((markdown) => {
+              const html = marked.parse(markdown);
+              document.getElementById("post-content").innerHTML = html;
+            })
+            .catch((error) => {
+              console.error("error loading post: ", error);
+              document.getElementById("post-content").innerHTML =
+                "<p>something went wrong</p>";
+            });
+        }
+      });
+    </script>
+  </body>
+</html>
