@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0"
+     xmlns:atom="http://www.w3.org/2005/Atom"
+     xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Anupam's Posts</title>
+    <link>https://rjanupam.github.io/posts/</link>
+    <description>Random posts by Anupam</description>
+    <atom:link href="https://rjanupam.github.io/posts/rss_feed.xml" rel="self" type="application/rss+xml" />
+    
+        <item>
+          <title>Been 7 months</title>
+          <link>https://rjanupam.github.io/posts/articles/been-7-months.html</link>
+          <guid>https://rjanupam.github.io/posts/articles/been-7-months.html</guid>
+          <pubDate>Tue, 13 May 2025 00:00:00 GMT</pubDate>
+          <description><![CDATA[Been 7 months <p><a href="https://rjanupam.github.io/posts/articles/been-7-months.html">Read full post</a></p>]]></description>
+          <content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/">
+            <![CDATA[<h1>Been 7 months</h1>
+<h2>Procrastinated for 7 (almost 8) months</h2>
+<p>But, am back writing today, also did a little update to the site, grabbed a domain through github students, played around with cloudflare a bit, used github actions, some tweaks here n there. <em>good stuff</em>.</p>
+<p>Thought I’d finally talk a bit about my setup~never done that before.</p>
+<hr>
+<h2>The setup</h2>
+<p><strong>Arch Linux</strong> with <strong>Hyprland</strong> (yeah wayland life). I don’t rice for aesthetics but rather for functionality~with a side of <em>"this doesn’t look like garbage."</em></p>
+<p>Interestingly, I tried <strong>i3</strong> for a hot minute and thought, <em>"Huh, this actually looks... better, than what i have got?"</em> So, naturally, i did the logical thing~stole its visual soul and put it into Hyprland. Most of my configs are just pulled from public anyway. that's just being efficient.</p>
+<h3>Tools:-</h3>
+<p><strong>Hyprland:</strong> but not the animation heavy kind, no wobbly windows. though i keep a keybind to activate all animations and stuff, just in case :)</p>
+<p><strong>Kitty:</strong> its got everything i ever needed in a terminal. ghostty is bulky meanwhile.</p>
+<p><strong>Nushell:</strong> i deal with data a lot, so i can do something like: <code>open data.csv | where year > 2020 | sort-by name</code></p>
+<p><strong>Zathura:</strong> PDF/E-book viewer, its the best, and got vim keybinds</p>
+<p><strong>Pandoc:</strong> document conversions are ofc a requirement</p>
+<p><strong>mpv/imv:</strong> mpv has yt-dlp support, so i watch videos from internet directly on it, cuz browsers are ugly and bulky</p>
+<p><strong>ffmpeg/imagemagick/sox:</strong> these are so good tools, ffmpeg especially is what i use most, images are edited usually in <strong>krita</strong> meanwhile. <strong>sox</strong>, well its there is enough.</p>
+<p><strong>Neovim:</strong> I dont really recommend it to everyone. its real power plays when you extend its functionality, creating your own environment n stuff. I actually wrote some plugins myself <em>(for tasks that can be performed from the editor itself)</em>. i am indeed writing this blog post in neovim, which i created using a plugin i created for notes, journals, and recently added blogs thingy.</p>
+<p><strong>Aria2:</strong> yeah, i download a lot, like a lot really.</p>
+<p><strong>Newsboat:</strong> for RSS. using this since like 2 days now <em>(on friend's recommendation)</em>, havent customized yet, so no idea, its TUI though, thats nice.</p>
+<h3>But why</h3>
+<p>well, just cuz i need a fully controlled environment, which is easy to make if i use these tools. These tools are my puppets, I pull the strings.</p>
+<hr>
+<p>That’s it for now. Just wanted to break the silence. Might write again soon, or in another 7 months~we’ll see.</p> <p><a href="https://rjanupam.github.io/posts/articles/been-7-months.html">Read full post</a></p>]]>
+          </content:encoded>
+        </item>
+      
+
+        <item>
+          <title>Hey There!</title>
+          <link>https://rjanupam.github.io/posts/articles/hey_there.html</link>
+          <guid>https://rjanupam.github.io/posts/articles/hey_there.html</guid>
+          <pubDate>Wed, 18 Sep 2024 00:00:00 GMT</pubDate>
+          <description><![CDATA[Hey there! <p><a href="https://rjanupam.github.io/posts/articles/hey_there.html">Read full post</a></p>]]></description>
+          <content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/">
+            <![CDATA[<h2>Hey there!</h2>
+<h3>Anupam here!</h3>
+<p>So, is this a blog, nah.. I will just post something every now and then (sounds like a blog huh). Who's gonna read it all anyway, well actually I only know just 4 people who will every now and then come looking for new posts. Prolly I will make new friends.</p>
+<p>I created the site only cuz I wanted to, though I also want to have a domain name and host it on my own server. There time guys; maybe someday when I earn a living.</p>
+<p>I will post stuff that I do, and my interests. Honestly, I have no idea what this will turn into.</p>
+<p>For today, I am gonna leave a tip here:</p>
+<blockquote>
+<p><em>Procrastination is opportunity's assassin.</em></p>
+</blockquote>
+<p>So get up anon, what are you waiting for.</p>
+<hr>
+<p>You can reach me on <a href="https://x.com/rjanupam">X</a>.</p> <p><a href="https://rjanupam.github.io/posts/articles/hey_there.html">Read full post</a></p>]]>
+          </content:encoded>
+        </item>
+      
+  </channel>
+</rss>

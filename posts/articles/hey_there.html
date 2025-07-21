@@ -3,15 +3,15 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/jpg" href="../static/images/profile_pic.jpg" />
+    <link rel="icon" type="image/jpg" href="../../static/images/profile_pic.jpg" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
       rel="stylesheet"
     />
-    <title>anupam's post</title>
-    <link rel="stylesheet" href="../static/style.css" />
+    <title>Hey There! - anupam's post</title>
+    <link rel="stylesheet" href="../../static/style.css" />
     <link
       rel="stylesheet"
       id="hljs-theme-light"
@@ -26,13 +26,14 @@
       media="not all"
       disabled
     />
+    <meta name="post-id" content="hey_there">
   </head>
   <body class="ibm-plex-mono-regular">
     <div class="screen">
       <header>
         <div class="name ibm-plex-mono-bold">anupam</div>
         <nav class="nav-bar">
-          <a href="/posts">back to posts</a>
+          <a href="../index.html">back to posts</a>
           <div
             id="view-counter-container"
             class="view-counter"
@@ -59,59 +60,40 @@
         </nav>
       </header>
       <hr />
-      <main id="post-content"></main>
+      <main id="post-content">
+        <h2>Hey there!</h2>
+<h3>Anupam here!</h3>
+<p>So, is this a blog, nah.. I will just post something every now and then (sounds like a blog huh). Who's gonna read it all anyway, well actually I only know just 4 people who will every now and then come looking for new posts. Prolly I will make new friends.</p>
+<p>I created the site only cuz I wanted to, though I also want to have a domain name and host it on my own server. There time guys; maybe someday when I earn a living.</p>
+<p>I will post stuff that I do, and my interests. Honestly, I have no idea what this will turn into.</p>
+<p>For today, I am gonna leave a tip here:</p>
+<blockquote>
+<p><em>Procrastination is opportunity's assassin.</em></p>
+</blockquote>
+<p>So get up anon, what are you waiting for.</p>
+<hr>
+<p>You can reach me on <a href="https://x.com/rjanupam">X</a>.</p>
+      </main>
       <footer>
-        <p>&copy; 2025 rjanupam.me</p>
+        <p>© 2025 rjanupam.me</p>
       </footer>
     </div>
 
-    <script src="../js/markdown.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.9.0/build/highlight.min.js"></script>
-
     <script>
       document.addEventListener("DOMContentLoaded", function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        const mdFile = urlParams.get("post");
-
-        if (mdFile) {
-          fetch(`markdown/${mdFile}.md`)
-            .then((res) => {
-              if (!res.ok) {
-                throw new Error(`error fetching: ${res.status}`);
-              }
-              return res.text();
-            })
-            .then((markdown) => {
-              const html = markdownRender(markdown);
-              const postContentElement =
-                document.getElementById("post-content");
-              postContentElement.innerHTML = html;
-
-              // load highlight.js
-              if (typeof hljs !== "undefined") {
-                postContentElement
-                  .querySelectorAll("pre code")
-                  .forEach((block) => {
-                    hljs.highlightElement(block);
-                  });
-                const currentSiteTheme =
-                  document.documentElement.getAttribute("data-theme") ||
-                  "light";
-                updateHljsTheme(currentSiteTheme);
-              } else {
-                console.warn(
-                  "highlight.js not loaded, code blocks will not be highlighted.",
-                );
-              }
-            })
-            .catch((error) => {
-              console.error("error loading post: ", error);
-              document.getElementById("post-content").innerHTML =
-                "<p>something went wrong</p>";
-            });
+        if (typeof hljs !== "undefined") {
+          document.querySelectorAll("pre code").forEach((block) => {
+            hljs.highlightElement(block);
+          });
+          const currentSiteTheme = document.documentElement.getAttribute("data-theme") || "light";
+          if (typeof updateHljsTheme === 'function') {
+             updateHljsTheme(currentSiteTheme);
+          }
         } else {
-          document.getElementById("post-content").innerHTML =
-            "<p>No post specified. Please select a post from the <a href='index.html'>posts page</a></p>";
+          console.warn(
+            "highlight.js not loaded, code blocks will not be highlighted.",
+          );
         }
       });
     </script>
@@ -120,8 +102,8 @@
       <div id="lain-images" class="lain-images"></div>
       <button id="lain-dismiss" class="lain-dismiss">✖</button>
     </div>
-    <audio id="lain-audio" loop src="static/audio/lain-takeover.mp3"></audio>
-    <script src="../js/script.js"></script>
-    <script src="../js/views-count.js"></script>
+    <audio id="lain-audio" loop src="../../static/audio/lain-takeover.mp3"></audio>
+    <script src="../../js/script.js"></script>
+    <script src="../../js/views-count.js"></script>
   </body>
 </html>

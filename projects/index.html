@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="anupam's webmark - personal site of CS student interested in ML, systems, and the weird web."
+    />
+    <link rel="icon" type="image/jpg" href="static/images/profile_pic.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <title>anupam's projects</title>
+    <link rel="stylesheet" href="../static/style.css" />
+  </head>
+  <body class="ibm-plex-mono-regular">
+    <div class="screen">
+      <header>
+        <div class="name ibm-plex-mono-bold">anupam</div>
+        <nav>
+          <a href="/">home</a>
+          <a href="/posts">posts</a>
+          <a href="/projects">projects</a>
+        </nav>
+      </header>
+      <hr />
+      <main>
+        <h2>Projects</h2>
+        <h3>FilmSphere</h3>
+        <p>
+          A movie booking system created as a learning project, utilizing React,
+          Zustand, Django, and PostgreSQL.
+        </p>
+        <a href="https://github.com/filmsphere">View on GitHub</a>
+        <hr />
+        <section>
+          <h3>ML Playground</h3>
+          <p>Upload an image to classify it with MobileNet!</p>
+          <input type="file" id="image-upload" accept="image/*" />
+          <div id="prediction"></div>
+        </section>
+      </main>
+      <footer>
+        <p>&copy; 2025 rjanupam.me</p>
+      </footer>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@latest"></script>
+    <script>
+      async function loadModel() {
+        const model = await mobilenet.load();
+        const input = document.getElementById("image-upload");
+        input.addEventListener("change", async () => {
+          const img = document.createElement("img");
+          img.src = URL.createObjectURL(input.files[0]);
+          img.onload = async () => {
+            const predictions = await model.classify(img);
+            document.getElementById("prediction").innerHTML = predictions
+              .map((p) => `${p.className}: ${Math.round(p.probability * 100)}%`)
+              .join("<br>");
+          };
+        });
+      }
+      loadModel();
+    </script>
+    <div id="lain-takeover" class="lain-takeover" style="display: none">
+      <div class="lain-text"></div>
+      <div id="lain-images" class="lain-images"></div>
+      <button id="lain-dismiss" class="lain-dismiss">✖</button>
+    </div>
+    <audio id="lain-audio" loop src="static/audio/lain-takeover.mp3"></audio>
+    <script src="../js/script.js"></script>
+  </body>
+</html>
