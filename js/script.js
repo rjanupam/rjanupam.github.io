@@ -20,111 +20,55 @@ document.addEventListener("DOMContentLoaded", () => {
     updateHljsTheme(newTheme);
   });
 
-  // Lain Takeover Easter Egg
-  const lainQuotes = [
-    "I don’t seem to understaaannnddd...",
-    "Present day, present time!",
-    "Let’s all love Lain!",
-    "The Wired is watching...",
-  ];
   let keys = [];
+  // prettier-ignore
   const konami = [
-    "ArrowUp",
-    "ArrowUp",
-    "ArrowDown",
-    "ArrowDown",
-    "ArrowLeft",
-    "ArrowRight",
-    "ArrowLeft",
-    "ArrowRight",
-    "b",
-    "a",
+    "ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown",
+    "ArrowLeft", "ArrowRight", "ArrowLeft", "ArrowRight",
+    "b", "a",
   ];
-  let imageIndex = 1;
-  let failedFetches = 0;
-  const maxImages = 15;
-  let imageElements = [];
+  let lainResourcesLoaded = false;
 
-  async function tryFetchImage(index) {
-    return new Promise((resolve, reject) => {
-      const img = new Image();
-      img.src = `/static/images/lain/lain-${index}.png`;
-      img.onload = () => resolve(true);
-      img.onerror = () => reject(false);
-    });
-  }
-
-  async function loadImages(takeover, imagesContainer) {
-    while (failedFetches < 3 && imageIndex <= 100) {
-      try {
-        await tryFetchImage(imageIndex);
-        failedFetches = 0;
-        if (imageElements.length < maxImages) {
-          const imgDiv = document.createElement("div");
-          imgDiv.className = "lain-image lain-image-noise";
-          imgDiv.style.backgroundImage = `url("/static/images/lain/lain-${imageIndex}.png")`;
-          imgDiv.style.top = `${Math.random() * 80}%`;
-          imgDiv.style.left = `${Math.random() * 80}%`;
-          imgDiv.style.animation = `advancedGlitch ${0.5 + Math.random() * 1}s infinite linear, move ${8 + Math.random() * 4}s linear infinite, fadeIn 0.5s forwards`;
-          imagesContainer.appendChild(imgDiv);
-          imageElements.push(imgDiv);
-        } else {
-          const replaceIndex = Math.floor(Math.random() * imageElements.length);
-          imageElements[replaceIndex].style.backgroundImage =
-            `url("/static/images/lain/lain-${imageIndex}.png")`;
-          imageElements[replaceIndex].style.top = `${Math.random() * 80}%`;
-          imageElements[replaceIndex].style.left = `${Math.random() * 80}%`;
-          imageElements[replaceIndex].style.animation =
-            `advancedGlitch ${0.5 + Math.random() * 1}s infinite linear, move ${8 + Math.random() * 4}s linear infinite`;
-        }
-        imageIndex++;
-      } catch (error) {
-        failedFetches++;
-        imageIndex++;
-      }
-      await new Promise((resolve) => setTimeout(resolve, 200));
+  function loadLainResources() {
+    if (lainResourcesLoaded) {
+      const takeover = document.getElementById("lain-takeover");
+      if (takeover) takeover.style.display = "block";
+      const audio = document.getElementById("lain-audio");
+      if (audio) audio.play().catch((e) => console.error(e));
+      return;
     }
+    lainResourcesLoaded = true;
+    console.log("PRESENT DAY, PRESENT TIME!");
+    const lainCSS = document.createElement("link");
+    lainCSS.rel = "stylesheet";
+    lainCSS.href = "/static/lain.css";
+    document.head.appendChild(lainCSS);
+    const takeoverContainer = document.createElement("div");
+    takeoverContainer.id = "lain-takeover";
+    takeoverContainer.className = "lain-takeover";
+    takeoverContainer.style.display = "none";
+    takeoverContainer.innerHTML = `
+      <div class="lain-text"></div>
+      <div id="lain-images" class="lain-images"></div>
+      <button id="lain-dismiss" class="lain-dismiss">✖</button>
+    `;
+    document.body.appendChild(takeoverContainer);
+    const audioEl = document.createElement("audio");
+    audioEl.id = "lain-audio";
+    audioEl.loop = true;
+    audioEl.src = "/static/audio/lain-takeover.mp3";
+    document.body.appendChild(audioEl);
+    const lainScript = document.createElement("script");
+    lainScript.src = "/js/lain.js";
+    document.body.appendChild(lainScript);
   }
 
-  document.addEventListener("keydown", async (e) => {
+  document.addEventListener("keydown", (e) => {
     keys = [...keys, e.key].slice(-10);
     if (keys.join("") === konami.join("")) {
-      const takeover = document.getElementById("lain-takeover");
-      const audio = document.getElementById("lain-audio");
-      const lainText = document.querySelector(".lain-text");
-      const imagesContainer = document.getElementById("lain-images");
-      if (takeover && audio && imagesContainer) {
-        takeover.style.display = "block";
-        document.body.click(); // oh the user clicked
-        audio
-          .play()
-          .catch((err) => console.error("Audio playback failed:", err));
-        if (lainText) {
-          lainText.textContent =
-            lainQuotes[Math.floor(Math.random() * lainQuotes.length)];
-        }
-        imageIndex = 1;
-        failedFetches = 0;
-        imageElements = [];
-        imagesContainer.innerHTML = "";
-        await loadImages(takeover, imagesContainer);
-      }
+      loadLainResources();
     }
   });
-
-  const dismissButton = document.getElementById("lain-dismiss");
-  if (dismissButton) {
-    dismissButton.addEventListener("click", () => {
-      const takeover = document.getElementById("lain-takeover");
-      const audio = document.getElementById("lain-audio");
-      if (takeover && audio) {
-        takeover.style.display = "none";
-        audio.pause();
-        audio.currentTime = 0;
-        imageElements = [];
-      }
-    });
-  }
 });
 
 function updateHljsTheme(theme) {
