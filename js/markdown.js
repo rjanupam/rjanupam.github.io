@@ -2,11 +2,11 @@ function markdownRender(markdownText) {
   function escapeHtml(text) {
     if (typeof text !== "string") return "";
     return text
-      .replace(/&/g, "&")
-      .replace(/</g, "<")
-      .replace(/>/g, ">")
-      .replace(/"/g, '"')
-      .replace(/'/g, "'");
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 
   function parseInline(text) {
@@ -29,7 +29,7 @@ function markdownRender(markdownText) {
       return `<code>${escapeHtml(codeContent)}</code>`;
     });
 
-    // Images: Must be before links
+    // Images
     text = text.replace(
       /!\[(.*?)\]\((.*?)\)/g,
       (match, alt, src) =>
@@ -46,9 +46,12 @@ function markdownRender(markdownText) {
     // Strong and Emphasis
     text = text
       .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-      .replace(/\_\_(.*?)\_\_/g, "<strong>$1</strong>")
+      .replace(
+        /(?<![a-zA-Z0-9])\_\_(.*?)\_\_(?![a-zA-Z0-9])/g,
+        "<strong>$1</strong>",
+      )
       .replace(/\*(.*?)\*/g, "<em>$1</em>")
-      .replace(/\_(.*?)\_/g, "<em>$1</em>");
+      .replace(/(?<![a-zA-Z0-9])\_(.*?)\_(?![a-zA-Z0-9])/g, "<em>$1</em>");
 
     // Strikethrough
     text = text.replace(/~~(.*?)~~/g, "<del>$1</del>");

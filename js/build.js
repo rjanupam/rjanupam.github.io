@@ -9,10 +9,6 @@ const POSTS_DIR_HTML = path.join(__dirname, "../posts/articles");
 const POSTS_JSON = path.join(__dirname, "../posts/posts.json");
 const RSS_PATH = path.join(__dirname, "../posts/rss_feed.xml");
 
-if (!fs.existsSync(POSTS_DIR_HTML)) {
-  fs.mkdirSync(POSTS_DIR_HTML, { recursive: true });
-}
-
 function extractFirstParagraph(markdown) {
   const firstParagraph = markdown
     .split("\n\n")
@@ -147,42 +143,85 @@ function generateSite() {
     posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     posts.forEach((post) => {
+      const outputFilePath = path.join(POSTS_DIR_HTML, `${post.file}.html`);
+      if (fs.existsSync(outputFilePath)) {
+        console.log(`Skipping: ${post.file}.html already exists.`);
+        return; // skip
+      }
+
       const markdown = fs.readFileSync(
         path.join(POSTS_DIR_MD, `${post.file}.md`),
         "utf-8",
       );
       const htmlContent = markdownRender(markdown);
       const fullHtmlPage = getPostHTMLTemplate(post, htmlContent, post.file);
-      const outputFilePath = path.join(POSTS_DIR_HTML, `${post.file}.html`);
+
       fs.writeFileSync(outputFilePath, fullHtmlPage);
       console.log(`Generated HTML for: ${post.file}.html`);
     });
 
-    const items = posts
-      .map((post) => {
-        const markdown = fs.readFileSync(
-          path.join(POSTS_DIR_MD, `${post.file}.md`),
-          "utf-8",
-        );
-        const description = extractFirstParagraph(markdown);
-        const fullContent = markdownRender(markdown);
-        const postUrl = `${SITE_URL}/posts/articles/${post.file}.html`;
-        const readMoreLink = `<p><a href="${postUrl}">Read full post</a></p>`;
+    let existingGuids = new Set();
+    let existingItems = "";
 
-        return `
-        <item>
-          <title>${escapeXml(post.title)}</title>
-          <link>${postUrl}</link>
-          <guid>${postUrl}</guid>
-          <pubDate>${new Date(post.date).toUTCString()}</pubDate>
-          <description><![CDATA[${description} ${readMoreLink}]]></description>
-          <content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/">
-            <![CDATA[${fullContent} ${readMoreLink}]]>
-          </content:encoded>
-        </item>
-      `;
-      })
-      .join("\n");
+    if (fs.existsSync(RSS_PATH)) {
+      const existingFeed = fs.readFileSync(RSS_PATH, "utf-8");
+
+      const guidRegex = /<guid>(.*?)<\/guid>/g;
+      let match;
+      while ((match = guidRegex.exec(existingFeed)) !== null)
+        existingGuids.add(match[1]);
+
+      const itemsRegex = /<channel>([\s\S]*?)<\/channel>/;
+      const channelMatch = existingFeed.match(itemsRegex);
+      if (channelMatch && channelMatch[1]) {
+        const innerContent = channelMatch[1];
+        // everything but the channel's metadata
+        existingItems = innerContent
+          .replace(/<title>.*<\/title>/, "")
+          .replace(/<link>.*<\/link>/, "")
+          .replace(/<description>.*<\/description>/, "")
+          .replace(/<atom:link.*?\/>/, "")
+          .trim();
+      }
+    }
+
+    const newPosts = posts.filter((post) => {
+      const postUrl = `${SITE_URL}/posts/articles/${post.file}.html`;
+      return !existingGuids.has(postUrl);
+    });
+
+    if (newPosts.length > 0) {
+      const newItems = newPosts
+        .map((post) => {
+          const markdown = fs.readFileSync(
+            path.join(POSTS_DIR_MD, `${post.file}.md`),
+            "utf-8",
+          );
+          const description = extractFirstParagraph(markdown);
+          const fullContent = markdownRender(markdown);
+          const postUrl = `${SITE_URL}/posts/articles/${post.file}.html`;
+          const readMoreLink = `<p><a href="${postUrl}">Read full post</a></p>`;
+
+          return `
+            <item>
+              <title>${escapeXml(post.title)}</title>
+              <link>${postUrl}</link>
+              <guid>${postUrl}</guid>
+              <pubDate>${new Date(post.date).toUTCString()}</pubDate>
+              <description><![CDATA[${description} ${readMoreLink}]]></description>
+              <content:encoded xmlns:content="http://purl.org/rss/1.0/modules/content/">
+                <![CDATA[${fullContent} ${readMoreLink}]]>
+              </content:encoded>
+            </item>
+          `;
+        })
+        .join("\n");
+
+      console.log(`Adding ${newPosts.length} new item(s) to the RSS feed.`);
+      existingItems = newItems + "\n" + existingItems;
+    } else {
+      console.log("RSS feed is already up-to-date. No new items to add.");
+    }
 
     const rssFeed = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0"
@@ -193,12 +232,13 @@ function generateSite() {
     <link>${SITE_URL}/posts/</link>
     <description>Random posts by Anupam</description>
     <atom:link href="${SITE_URL}/posts/rss_feed.xml" rel="self" type="application/rss+xml" />
-    ${items}
+    ${existingItems}
   </channel>
 </rss>`;
 
     fs.writeFileSync(RSS_PATH, rssFeed);
-    console.log("RSS feed generated successfully.");
+    console.log("RSS feed generation complete.");
+
     console.log("Site generation complete. SITE_URL for links: " + SITE_URL);
   } catch (error) {
     console.error("Error generating site:", error);
