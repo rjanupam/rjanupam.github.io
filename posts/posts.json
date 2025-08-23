@@ -1,12 +1,1 @@
-[
-  {
-    "title": "Hey There!",
-    "date": "2024-09-18",
-    "file": "hey_there"
-  },
-  {
-    "title": "Been 7 months",
-    "date": "2025-05-13",
-    "file": "been-7-months"
-  }
-]
+[{"file": "hey_there", "date": "2024-09-18", "title": "Hey There!"}, {"file": "been-7-months", "date": "2025-05-13", "title": "Been 7 months"}, {"file": "a-better-shell", "date": "2025-08-23", "title": "a better shell"}]
