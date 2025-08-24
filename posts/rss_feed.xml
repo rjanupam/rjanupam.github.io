@@ -7,8 +7,7 @@
     <link>https://rjanupam.github.io/posts/</link>
     <description>Random posts by Anupam</description>
     <atom:link href="https://rjanupam.github.io/posts/rss_feed.xml" rel="self" type="application/rss+xml" />
-    
-            <item>
+    <item>
               <title>a better shell</title>
               <link>https://rjanupam.github.io/posts/articles/a-better-shell.html</link>
               <guid>https://rjanupam.github.io/posts/articles/a-better-shell.html</guid>
