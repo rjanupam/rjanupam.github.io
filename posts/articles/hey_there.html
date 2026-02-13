@@ -1,11 +1,15 @@
-<!doctype html>
-<html>
-  <head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/jpg" href="../../static/images/profile_pic.jpg" />
-    <title>Hey There! - anupam's post</title>
-    <link rel="stylesheet" href="../../static/style.css" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hey There!</title>
+
+    <meta name="description" content="anupam's webmark - personal site of rjanupam, interested in ML, systems, and the weird web">
+
+<link rel="icon" type="image/jpg" href="/static/images/profile_pic.jpg" />
+<link rel="stylesheet" href="/static/style.css" />
+
     <link
       rel="stylesheet"
       id="hljs-theme-light"
@@ -25,9 +29,9 @@
   <body>
     <div class="screen">
       <header>
-        <div class="name">anupam</div>
+        <div class="name">anupam's webmark</div>
         <nav class="nav-bar">
-          <a href="../index.html">back to posts</a>
+          <a href="/posts">back to posts</a>
           <div
             id="view-counter-container"
             class="view-counter"
@@ -69,7 +73,7 @@
 <p>You can reach me on <a href="https://x.com/rjanupam">X</a>.</p>
       </main>
       <footer>
-        <p>© 2025 rjanupam.me</p>
+        <p>&copy; 2026 rjanupam</p>
       </footer>
     </div>
 
@@ -80,14 +84,6 @@
           document.querySelectorAll("pre code").forEach((block) => {
             hljs.highlightElement(block);
           });
-          const currentSiteTheme = document.documentElement.getAttribute("data-theme") || "light";
-          if (typeof updateHljsTheme === 'function') {
-             updateHljsTheme(currentSiteTheme);
-          }
-        } else {
-          console.warn(
-            "highlight.js not loaded, code blocks will not be highlighted.",
-          );
         }
       });
     </script>
@@ -96,8 +92,8 @@
       <div id="lain-images" class="lain-images"></div>
       <button id="lain-dismiss" class="lain-dismiss">✖</button>
     </div>
-    <audio id="lain-audio" loop src="../../static/audio/lain-takeover.mp3"></audio>
-    <script src="../../js/script.js"></script>
-    <script src="../../js/views-count.js"></script>
+    <audio id="lain-audio" loop src="/static/audio/lain-takeover.mp3"></audio>
+    <script src="/js/script.js"></script>
+    <script src="/js/views-count.js"></script>
   </body>
 </html>

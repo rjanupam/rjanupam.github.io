@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>anupam's webmark RSS Feed</title>
+    <link>https://rjanupam.me/</link>
+    <description>Latest posts from rjanupam</description>
+    <atom:link href="https://rjanupam.me/rss.xml" rel="self" type="application/rss+xml" />
+    
+<item>
+  <title>a better shell</title>
+  <link>https://rjanupam.me/posts/articles/a-better-shell.html</link>
+  <guid>https://rjanupam.me/posts/articles/a-better-shell.html</guid>
+  <pubDate>Sat, 23 Aug 2025 00:00:00 GMT</pubDate>
+  <description><![CDATA[Hello everyone! <p><a href="https://rjanupam.me/posts/articles/a-better-shell.html">Read full post</a></p>]]></description>
+</item>
+
+<item>
+  <title>Been 7 months</title>
+  <link>https://rjanupam.me/posts/articles/been-7-months.html</link>
+  <guid>https://rjanupam.me/posts/articles/been-7-months.html</guid>
+  <pubDate>Tue, 13 May 2025 00:00:00 GMT</pubDate>
+  <description><![CDATA[But, am back writing today, also did a little update to the site, grabbed a domain through github students, played around with cloudflare a bit, used github actions, some tweaks here n there. _good stuff_. <p><a href="https://rjanupam.me/posts/articles/been-7-months.html">Read full post</a></p>]]></description>
+</item>
+
+<item>
+  <title>Hey There!</title>
+  <link>https://rjanupam.me/posts/articles/hey_there.html</link>
+  <guid>https://rjanupam.me/posts/articles/hey_there.html</guid>
+  <pubDate>Wed, 18 Sep 2024 00:00:00 GMT</pubDate>
+  <description><![CDATA[So, is this a blog, nah.. <p><a href="https://rjanupam.me/posts/articles/hey_there.html">Read full post</a></p>]]></description>
+</item>
+  </channel>
+</rss>

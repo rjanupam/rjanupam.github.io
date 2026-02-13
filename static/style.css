@@ -197,8 +197,33 @@ main section,
   margin-bottom: 0.5em;
 }
 
+.contact-section {
+  margin-bottom: 2em;
+}
+
+.contact-section h2 {
+  margin-top: 0;
+}
+
+.contact-info {
+  margin-bottom: 1em;
+}
+
+.contact-info p {
+  margin: 0.5em 0;
+}
+
+.gpg-key {
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+.gpg-key:hover {
+  opacity: 1;
+}
+
 .social-links {
-  text-align: center;
+  text-align: left;
   padding-top: 0.5em;
   padding-bottom: 0.5em;
 }
