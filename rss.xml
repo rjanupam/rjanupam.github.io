@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+<rss version="2.0"
+  xmlns:atom="http://www.w3.org/2005/Atom"
+  xmlns:content="http://purl.org/rss/1.0/modules/content/"
+  xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>anupam's webmark RSS Feed</title>
     <link>https://rjanupam.me/</link>
     <description>Latest posts from rjanupam</description>
+    <language>en-us</language>
     <atom:link href="https://rjanupam.me/rss.xml" rel="self" type="application/rss+xml" />
     
 <item>
@@ -11,7 +15,173 @@
   <link>https://rjanupam.me/posts/articles/a-better-shell.html</link>
   <guid>https://rjanupam.me/posts/articles/a-better-shell.html</guid>
   <pubDate>Sat, 23 Aug 2025 00:00:00 GMT</pubDate>
-  <description><![CDATA[Hello everyone! <p><a href="https://rjanupam.me/posts/articles/a-better-shell.html">Read full post</a></p>]]></description>
+  <description><![CDATA[Hello everyone!]]></description>
+  <content:encoded><![CDATA[<h1>a better shell</h1>
+<p>Hello everyone!</p>
+<p>So, i’ve been using <a href="https://github.com/nushell/nushell"><strong>Nushell</strong></a> as my daily driver for three months now. my previous shell was Fish, which i liked because it works well out of the box and is fast. Completions worked great and there’s almost no setup. Nushell’s different. I started using it just for programming/dev stuff, but then switched completely. its not without quirks, the initial setup takes more effort than Fish, some defaults feel like they should be built-in, Fish completions are more snappier.</p>
+<p><img src="https://rjanupam.me/static/images/20250823_104034_grim.png" alt="sys host cmd"></p>
+<p>So, why switch? Because of how it handles data. If your work touches structured stuff (json, csv, command output that you usually massage with awk/grep), Nushell is in a different league. it treats data like a proper language, not a blob of text. Also, its supported on <strong>Linux</strong>, <strong>Mac</strong> and <strong>Windows</strong> as well.</p>
+<p>it’s a trade-off. u sacrifice a little bit of that raw, instant speed for a big win in clarity and power for data-y tasks. not for everyone, but absolutely worth a spin to see if it fits your flow.</p>
+<hr>
+<h2>text -> structure</h2>
+<p>traditional shells spit text. you end up parsing columns that shift if the moon is in retrograde. nushell returns <strong>typed data</strong> (tables, lists, records).</p>
+<p><strong>bash/fish</strong>:</p>
+<pre><code class="language-bash">ls -l | sort -k5 -nr | head -n 5
+</code></pre>
+<p>i can't seem to remember these commands</p>
+<p><strong>nu</strong>:</p>
+<pre><code class="language-nu">ls | where type == file | sort-by size | reverse | first 5
+</code></pre>
+<p><img src="https://rjanupam.me/static/images/20250823_105530_grim.png" alt="structured output"></p>
+<p>its more verbose but readable and stable. columns have names (<code>name</code>, <code>type</code>, <code>size</code>), sizes are actual sizes, dates are dates. you stop doing text surgery and start querying data.</p>
+<hr>
+<h2>the pipeline</h2>
+<p>in nushell, the pipe doesn't just send text forward, it’s send a table/list/record forward.</p>
+<p><strong>top 5 largest files (current dir):</strong></p>
+<pre><code class="language-nu">ls | where type == file | sort-by size | reverse | first 5
+</code></pre>
+<p><strong>processes (>10% cpu):</strong></p>
+<pre><code class="language-nu">ps | where cpu &gt; 10 | sort-by cpu | reverse | select pid name cpu mem
+</code></pre>
+<p><img src="https://rjanupam.me/static/images/20250823_110111_grim.png" alt="ps shows processes"></p>
+<hr>
+<h2>usage examples</h2>
+<p><strong>curl,</strong></p>
+<pre><code class="language-nu">http get &quot;https://api.github.com/repos/nushell/nushell&quot; | get stargazers_count
+http get &quot;https://api.github.com/repos/nushell/nushell&quot; | get owner.login
+</code></pre>
+<p>yes, nushell has built-in http client</p>
+<p><strong>or, maybe let</strong></p>
+<pre><code class="language-nu">let nu_git_data = http get &quot;https://api.github.com/repos/nushell/nushell&quot;
+$nu_git_data | get stargazers_count
+</code></pre>
+<p><strong>csv/calc in the shell</strong></p>
+<pre><code class="language-nu">open data.csv | where status == &quot;active&quot; | group-by team | wrap rows | each { |it|
+  { team: $it.column0, count: ($it.rows | length) }
+} | sort-by count | reverse
+</code></pre>
+<p><strong>sqlite</strong></p>
+<pre><code class="language-nu">open foo.db | query db &quot;SELECT * FROM Bar&quot;
+</code></pre>
+<p><strong>the trio: <code>where</code>, <code>get</code>, <code>select</code></strong></p>
+<ul>
+<li><code>where</code> filters rows: <code>history | where command =~ &quot;git&quot;</code></li>
+<li><code>get</code> grabs fields: <code>ls | get name</code></li>
+<li><code>select</code> keeps columns: <code>ls | select name size modified</code></li>
+</ul>
+<p><strong>discoverability</strong></p>
+<pre><code class="language-nu">help commands | where name =~ &quot;split&quot;
+help str
+help date now
+</code></pre>
+<p><img src="https://rjanupam.me/static/images/20250823_112039_grim.png" alt="good help"></p>
+<p><strong>log slicing</strong></p>
+<pre><code class="language-nu">open app.log
+| lines
+| where $it =~ &quot;ERROR&quot;
+| first 50
+</code></pre>
+<p><strong>errors</strong></p>
+<p><img src="https://rjanupam.me/static/images/20250823_112008_grim.png" alt="shows detailed errors"></p>
+<hr>
+<h2>the config (<code>config.nu</code>)</h2>
+<p>Here, i am using sqlite for shell history, <a href="https://github.com/carapace-sh/carapace">carapace</a> as external completions provider, and <a href="https://github.com/starship/starship">starship</a> for prompt. this was my starter config.</p>
+<pre><code class="language-nu">$env.config = {
+    show_banner: false
+
+    history :{
+        file_format: &quot;sqlite&quot;
+        max_size: 1_000_000
+        sync_on_enter: true
+        isolation: false
+    }
+
+    completions: {
+        case_sensitive: false
+        quick: true
+        partial: true
+        algorithm: &quot;fuzzy&quot;
+        sort: &quot;smart&quot;
+        use_ls_colors: true
+    }
+
+    cursor_shape: {
+        emacs: &quot;line&quot;
+        vi_insert: &quot;line&quot;
+        vi_normal: &quot;block&quot;
+    }
+}
+
+# completions ----------------
+$env.CARAPACE_BRIDGES = &#39;inshellisense,fish,zsh,bash&#39;
+mkdir ~/.cache/carapace
+carapace _carapace nushell | save --force ~/.cache/carapace/init.nu
+source ~/.config/carapace/init.nu
+
+# alias ----------------------
+alias ll = ls -l
+alias la = ls -a
+alias lla = ls -la
+alias sl = ^ls
+alias mk = mkdir
+alias cat = open --raw
+alias nv = nvim
+
+# for python venv ------------
+# here some functions are defined that can be called from the shell
+# venv_activate .venv - for activate python virtual environment (.venv by default)
+# venv_deactivate - deactivating py venv
+
+export def --env venv_activate [a_venv_path: path = &quot;./.venv&quot;] {
+    let venv_path = $a_venv_path | path expand
+    let bin_path = $venv_path | path join &quot;bin&quot;
+    let python_path = $bin_path | path join &quot;python&quot;
+    let python3_path = $bin_path | path join &quot;python3&quot;
+
+    if not (($python_path | path exists) or ($python3_path | path exists)) {
+        print $&quot;Error: is not python venv path! ($a_venv_path)&quot;
+        return false
+    }
+    if (&quot;_OLD_VIRTUAL_PATH&quot; in $env) {
+        $env.PATH = $env._OLD_VIRTUAL_PATH
+        hide-env _OLD_VIRTUAL_PATH
+    }
+
+    $env.VIRTUAL_ENV = $venv_path
+    $env.PATH = $env.PATH | prepend $bin_path
+    $env._OLD_PROMPT_COMMAND_RIGHT = $env.PROMPT_COMMAND_RIGHT
+
+    return true
+}
+
+export def --env venv_deactivate [] {
+    if &quot;VIRTUAL_ENV&quot; in $env {
+        let venv_bin = $env.VIRTUAL_ENV | path join &quot;bin&quot;
+        hide-env VIRTUAL_ENV
+        $env.PATH = ($env.PATH | where {|x| $x != $venv_bin})
+        return true
+    }
+
+    return false
+}
+
+# prompt ---------------------
+$env.STARSHIP_LOG = &quot;error&quot;
+mkdir ($nu.data-dir | path join &quot;vendor/autoload&quot;)
+starship init nu | save -f ($nu.data-dir | path join &quot;vendor/autoload/starship.nu&quot;)
+</code></pre>
+<hr>
+<h2>trade-offs</h2>
+<ul>
+<li><strong>compat</strong>: you can’t copy-paste bash scripts and expect them to run in nu. use the escape hatch:
+
+<code>%%CODE0%%</code></li>
+<li><strong>completions</strong>: good for nu-native. carapace helps.</li>
+</ul>
+<p>trading POSIX universality for structured power and readability. if your work is data-heavy or you script a lot, it’s worth it.</p>
+<hr>
+<h2>nu vs fish</h2>
+<p>I'd rather put them in separate buckets. Fish is great for quick, interactive use with minimal setup, and its POSIX-like syntax feels familiar. Nushell, written in Rust, trades some of that instant familiarity for structured data pipelines that shine in data-heavy tasks. I still keep Fish installed and use it sometimes. Nushell has active development and a growing communit... <p><strong>[Post too long, <a href="https://rjanupam.me/posts/articles/a-better-shell.html">continue reading on site</a>]</strong></p>]]></content:encoded>
 </item>
 
 <item>
@@ -19,7 +189,30 @@
   <link>https://rjanupam.me/posts/articles/been-7-months.html</link>
   <guid>https://rjanupam.me/posts/articles/been-7-months.html</guid>
   <pubDate>Tue, 13 May 2025 00:00:00 GMT</pubDate>
-  <description><![CDATA[But, am back writing today, also did a little update to the site, grabbed a domain through github students, played around with cloudflare a bit, used github actions, some tweaks here n there. _good stuff_. <p><a href="https://rjanupam.me/posts/articles/been-7-months.html">Read full post</a></p>]]></description>
+  <description><![CDATA[But, am back writing today, also did a little update to the site, grabbed a domain through github students, played around with cloudflare a bit, used github actions, some tweaks here n there. _good stuff_.]]></description>
+  <content:encoded><![CDATA[<h1>Been 7 months</h1>
+<h2>Procrastinated for 7 (almost 8) months</h2>
+<p>But, am back writing today, also did a little update to the site, grabbed a domain through github students, played around with cloudflare a bit, used github actions, some tweaks here n there. <em>good stuff</em></p>
+<p>Thought I’d finally talk a bit about my setup~never done that before.</p>
+<hr>
+<h2>The setup</h2>
+<p><strong>Arch Linux</strong> with <strong>Hyprland</strong> (yeah wayland life). I don’t rice for aesthetics but rather for functionality~with a side of <em>"this doesn’t look like garbage."</em></p>
+<p>Interestingly, I tried <strong>i3</strong> for a hot minute and thought, <em>"Huh, this actually looks... better, than what i have got?"</em> So, naturally, i did the logical thing~stole its visual soul and put it into Hyprland. Most of my configs are just pulled from public anyway. that's just being efficient.</p>
+<h3>Tools:-</h3>
+<p><strong>Hyprland:</strong> but not the animation heavy kind, no wobbly windows. though i keep a keybind to activate all animations and stuff, just in case :)</p>
+<p><strong>Kitty:</strong> its got everything i ever needed in a terminal. ghostty is bulky meanwhile.</p>
+<p><strong>Nushell:</strong> i deal with data a lot, so i can do something like: <code>open data.csv | where year &gt; 2020 | sort-by name</code></p>
+<p><strong>Zathura:</strong> PDF/E-book viewer, its the best, and got vim keybinds</p>
+<p><strong>Pandoc:</strong> document conversions are ofc a requirement</p>
+<p><strong>mpv/imv:</strong> mpv has yt-dlp support, so i watch videos from internet directly on it, cuz browsers are ugly and bulky</p>
+<p><strong>ffmpeg/imagemagick/sox:</strong> these are so good tools, ffmpeg especially is what i use most, images are edited usually in <strong>krita</strong> meanwhile. <strong>sox</strong>, well its there is enough.</p>
+<p><strong>Neovim:</strong> I dont really recommend it to everyone. its real power plays when you extend its functionality, creating your own environment n stuff. I actually wrote some plugins myself <em>(for tasks that can be performed from the editor itself)</em>  i am indeed writing this blog post in neovim, which i created using a plugin i created for notes, journals, and recently added blogs thingy.</p>
+<p><strong>Aria2:</strong> yeah, i download a lot, like a lot really.</p>
+<p><strong>Newsboat:</strong> for RSS. using this since like 2 days now <em>(on friend's recommendation)</em>  havent customized yet, so no idea, its TUI though, thats nice.</p>
+<h3>But why</h3>
+<p>well, just cuz i need a fully controlled environment, which is easy to make if i use these tools. These tools are my puppets, I pull the strings.</p>
+<hr>
+<p>That’s it for now. Just wanted to break the silence. Might write again soon, or in another 7 months~we’ll see.</p>]]></content:encoded>
 </item>
 
 <item>
@@ -27,7 +220,19 @@
   <link>https://rjanupam.me/posts/articles/hey_there.html</link>
   <guid>https://rjanupam.me/posts/articles/hey_there.html</guid>
   <pubDate>Wed, 18 Sep 2024 00:00:00 GMT</pubDate>
-  <description><![CDATA[So, is this a blog, nah.. <p><a href="https://rjanupam.me/posts/articles/hey_there.html">Read full post</a></p>]]></description>
+  <description><![CDATA[So, is this a blog, nah..]]></description>
+  <content:encoded><![CDATA[<h2>Hey there!</h2>
+<h3>Anupam here!</h3>
+<p>So, is this a blog, nah.. I will just post something every now and then (sounds like a blog huh). Who's gonna read it all anyway, well actually I only know just 4 people who will every now and then come looking for new posts. Prolly I will make new friends.</p>
+<p>I created the site only cuz I wanted to, though I also want to have a domain name and host it on my own server. There time guys; maybe someday when I earn a living.</p>
+<p>I will post stuff that I do, and my interests. Honestly, I have no idea what this will turn into.</p>
+<p>For today, I am gonna leave a tip here:</p>
+<blockquote>
+<p><em>Procrastination is opportunity's assassin.</em></p>
+</blockquote>
+<p>So get up anon, what are you waiting for.</p>
+<hr>
+<p>You can reach me on <a href="https://x.com/rjanupam">X</a>.</p>]]></content:encoded>
 </item>
   </channel>
 </rss>
